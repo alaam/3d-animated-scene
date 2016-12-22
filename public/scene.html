@@ -119,6 +119,7 @@
         return scene;
     }
     window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function () {
         canvas = document.getElementById('renderCanvas');
         engine = new BABYLON.Engine(canvas, true);
         scene = createScene();
@@ -132,6 +133,7 @@
             sphere.rotation.x += 0.01;
             scene.render();
         });
+        },1000);
     });
     window.addEventListener('resize', function() {
         engine.resize();
