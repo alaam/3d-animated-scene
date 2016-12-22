@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    <title>Babylon - Getting Started</title>
+    <!-- link to the last version of babylon -->
+    <script src="js/babylon.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width   : 100%;
+            height  : 100%;
+            margin  : 0;
+            padding : 0;
+        }
+
+        #renderCanvas {
+            width   : 100%;
+            height  : 100%;
+            touch-action: none;
+        }
+</style>
+</head>
+<script>
+    var createScene = function() {
+        // create a basic BJS Scene object
+        var scene = new BABYLON.Scene(engine);
+        //Physics
+        // var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
+        var gravityVector = new BABYLON.Vector3(0,-1.81, 0);
+        var physicsPlugin = new BABYLON.CannonJSPlugin();
+        scene.enablePhysics(gravityVector, physicsPlugin);
+
+
+
+        // create a FreeCamera, and set its position to (x:0, y:5, z:-10)
+        var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(35, 9,-10), scene);
+
+        // target the camera to scene origin
+        camera.setTarget(BABYLON.Vector3.Zero());
+
+        // attach the camera to the canvas
+        camera.attachControl(canvas, false);
+
+        // create a basic light, aiming 0,1,0 - meaning, to the sky
+        var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
+
+        // create a built-in "sphere" shape; its constructor takes 5 params: name, width, depth, subdivisions, scene
+        var sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene);
+        sphere.physicsImpostor = new BABYLON.PhysicsImpostor(sphere, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0.9 }, scene);
+        sphere.position.y = 15;
+        sphere.material = new BABYLON.StandardMaterial("texture1", scene);
+        sphere.material.alpha = 0.5;
+        // sphere.material.diffuseColor = new BABYLON.Color3(1.0, 0.2, 0.7);
+        sphere.material.diffuseTexture = new BABYLON.Texture("grass.png", scene);
+        // move the sphere upward 1/2 of its height
+
+        // create a built-in "sphere" shape; its constructor takes 5 params: name, width, depth, subdivisions, scene
+        var sphere1 = BABYLON.Mesh.CreateSphere('sphere2', 16, 2, scene);
+        sphere1.physicsImpostor = new BABYLON.PhysicsImpostor(sphere1, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0.9 }, scene);
+        sphere1.position.y = 10;
+        sphere1.position.x += 2;
+        sphere1.material = new BABYLON.StandardMaterial("texture2", scene);
+        sphere1.material.alpha = 0.5;
+        sphere1.material.diffuseColor = new BABYLON.Color3(1.0, 0.2, 0.7);
+        // sphere1.material.diffuseTexture = new BABYLON.Texture("grass.png", scene);
+
+        for (j=1;j<6;j++) {
+            // create a built-in "sphere" shape; its constructor takes 5 params: name, width, depth, subdivisions, scene
+            var spherex = BABYLON.Mesh.CreateSphere('sphere'+j, 16, 2, scene);
+            spherex.physicsImpostor = new BABYLON.PhysicsImpostor(spherex, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 5, restitution: 0.5 }, scene);
+            spherex.position.y =  Math.floor(Math.random() * 26) + 10;
+            spherex.position.x = Math.floor(Math.random() * 25) + 1;
+            spherex.position.z = Math.floor(Math.random() * 5) + 1;
+            spherex.material = new BABYLON.StandardMaterial("texture2"+j, scene);
+            spherex.material.alpha = 0.9;
+            spherex.material.diffuseColor = new BABYLON.Color3(1.0, 0.2, 0.7);
+            // sphere1.material.diffuseTexture = new BABYLON.Texture("grass.png", scene);
+        }
+        for (j=1;j<6;j++) {
+            // create a built-in "sphere" shape; its constructor takes 5 params: name, width, depth, subdivisions, scene
+            var boxx = BABYLON.Mesh.CreateBox('box'+j, Math.floor(Math.random() * 3) + 1,scene);
+            boxx.physicsImpostor = new BABYLON.PhysicsImpostor(boxx, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 5, restitution: 0.5 }, scene);
+            boxx.position.y =  Math.floor(Math.random() * 26) + 10;
+            boxx.position.x = Math.floor(Math.random() * 15) + 1;
+            boxx.position.z = Math.floor(Math.random() * 5) + 1;
+            boxx.material = new BABYLON.StandardMaterial("texture2"+j, scene);
+            boxx.material.alpha = 0.9;
+            boxx.material.diffuseColor = new BABYLON.Color3(0.5, 0.8, 0.7);
+            // sphere1.material.diffuseTexture = new BABYLON.Texture("grass.png", scene);
+        }
+        var box = BABYLON.Mesh.CreateBox('box1', 3, scene);
+        box.position.x = 5;
+        box.position.y = 15;
+        box.material = new BABYLON.StandardMaterial("texture1", scene);
+        box.material.diffuseColor = new BABYLON.Color3(1.0, 0.9, 0.2);
+
+        var cylinder = BABYLON.Mesh.CreateCylinder("cylinder1", 4, 3, 3, 36, 1, scene, false, BABYLON.Mesh.DEFAULTSIDE);
+        cylinder.position.x = -4;
+        cylinder.position.y = 7;
+        cylinder.material = new BABYLON.StandardMaterial("texture1", scene);
+        cylinder.material.diffuseColor = new BABYLON.Color3(1.0, 0.7, 0.7);
+        // create a built-in "ground" shape; its constructor takes the same 5 params as the sphere's one
+        var ground = BABYLON.Mesh.CreateGround('ground1', 46, 46, 2, scene);
+        ground.material = new BABYLON.StandardMaterial("texture1", scene);
+        ground.material.diffuseColor = new BABYLON.Color3(0.0, 0.7, 0.0);
+
+        sphere.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, scene);
+        cylinder.physicsImpostor = new BABYLON.PhysicsImpostor(cylinder, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, restitution: 0.9 }, scene);
+        ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+
+        // var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene, customEffect);
+        // var mirrorMaterial = new BABYLON.StandardMaterial("texture4", scene);
+        // mirrorMaterial.reflectionTexture = new BABYLON.MirrorTexture("mirror", 512, scene, true);
+        // mirrorMaterial.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, -1.0, 0, -10.0);
+        // mirrorMaterial.reflectionTexture.renderList = [sphere, box];
+        // ground.material = mirrorMaterial;
+        // return the created scene
+        return scene;
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+        canvas = document.getElementById('renderCanvas');
+        engine = new BABYLON.Engine(canvas, true);
+        scene = createScene();
+        engine.runRenderLoop(function() {
+            var box1 = scene.getMeshByName("box1");
+            box1.rotation.y += 0.01;
+            box1.rotation.x += 0.01;
+            var cyl1 = scene.getMeshByName("cylinder1");
+            cyl1.rotation.x += 0.01;
+            var sphere = scene.getMeshByName("sphere1");
+            sphere.rotation.x += 0.01;
+            scene.render();
+        });
+    });
+    window.addEventListener('resize', function() {
+        engine.resize();
+    });
+</script>
+<body>
+    <canvas id="renderCanvas"></canvas>
+</body>
+</html>
